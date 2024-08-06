@@ -137,7 +137,7 @@ SQL中子查询的使用大大增强了 SELECT 查询的能力，因为很多时
 
 ### 4. 视图与存储过程
 
-#### （1）视图 ❤️ 
+#### （1）视图 ❤️
 
 - 常见的数据库对象
 
@@ -182,6 +182,7 @@ AS 查询语句
 CREATE VIEW 视图名称
 AS 查询语句
 ```
+
 ```sql
 -- 视图创建
 CREATE VIEW view01
@@ -196,6 +197,7 @@ SELECT * FROM view01;
 DELETE FROM view01 WHERE name='赵六';
 UPDATE view01 SET salary=20000 WHERE name='Ben';
 ```
+
 ![image.png](assets/image12.png)
 
 ![image.png](assets/image13.png)
@@ -212,13 +214,15 @@ SELECT e.id emp_id,e.name emp_name,d.name dept_name
 FROM employees e,departments d
 WHERE e.dept_id = d.id;
 ```
+
 - 删除视图
 
 ```sql
 -- 删除视图
 DROP VIEW view02;
 ```
-#### (2) 存储过程 ❤️ 
+
+#### (2) 存储过程 ❤️
 
 > **含义**：存储过程的英文是 Stored Procedure 。它的思想很简单，就是一组经过预先编译的 SQL 语句的封装。
 >
@@ -260,6 +264,7 @@ LANGUAGE SQL
 | SQL SECURITY { DEFINER | INVOKER }
 | COMMENT 'string'
 ```
+
 > - LANGUAGE SQL** ：说明存储过程执行体是由SQL语句组成的，当前系统支持的语言为SQL。**
 >
 > * [NOT] DETERMINISTIC **：指明存储过程执行的结果是否确定。DETERMINISTIC表示结果是确定的。每次执行存储过程时，相同的输入会得到相同的输出。NOT DETERMINISTIC表示结果是不确定的，相同的输入可能得到不同的输出。如果没有指定任意一个值，默认为NOT DETERMINISTIC。**
@@ -282,6 +287,7 @@ LANGUAGE SQL
 CALL 存储过程名(实参列表)
 ```
 
+
 |          | 关键字    | 调用语法        | 返回值        | 应用场景                         |
 | -------- | --------- | --------------- | ------------- | -------------------------------- |
 | 存储过程 | PROCEDURE | CALL 存储过程() | 为有0个或多个 | 一般用于更新                     |
@@ -290,6 +296,7 @@ CALL 存储过程名(实参列表)
 ```sql
 SELECT 函数名(实参列表)
 ```
+
 ### 5. 变量 和 流程控制
 
 > 在MySQL数据库的存储过程和函数中，可以使用变量来存储查询或计算的中间结果数据，或者输出最终的结果数据。**在 MySQL 数据库中，变量分为**系统变量**以及**用户自定义变量.
@@ -322,6 +329,7 @@ SHOW GLOBAL VARIABLES LIKE '%标识符%';
 SHOW SESSION VARIABLES LIKE '%标识符%';
 SHOW GLOBAL VARIABLES LIKE 'admin_%';
 ```
+
 > 作为 MySQL 编码规范，MySQL 中的系统变量以两个“@” 开头，其中“@@global”仅用于标记全局系统变量，“@@session”仅用于标记会话系统变量。“@@”首先标记会话系统变量，如果会话系统变量不存在，则标记全局系统变量。
 
 ```sql
@@ -334,12 +342,14 @@ SELECT @@session.变量名;
 #或者
 SELECT @@变量名;
 ```
+
 ```sql
 -- 修改最大连接
 SELECT @@global.max_connections;
 SET GLOBAL max_connections = 1000;
 SELECT @@global.max_connections;
 ```
+
 #### （2）自定义变量
 
 **用户变量是用户自己定义的，作为 MySQL 编码规范，MySQL 中的用户变量以**一个“@” **开头。根据作用范围不同，又分为**会话用户变量**和**局部变量。
@@ -356,11 +366,13 @@ SET @用户变量 := 值;
 SELECT @用户变量 := 表达式 [FROM 等子句];
 SELECT 表达式 INTO @用户变量 [FROM 等子句];
 ```
+
 ```sql
 SET @a = 1;
 SELECT @a;
 SELECT @big; #查看某个未声明的变量时，将得到NULL值
 ```
+
 ```sql
 BEGIN
 	-- 声明局部变量
@@ -375,9 +387,11 @@ BEGIN
 	SELECT 变量1,变量2,变量3;
 END
 ```
+
 ```sql
 DECLARE 变量名 类型 [default 值]; # 如果没有DEFAULT子句，初始值为NULL
 ```
+
 #### （3）流程控制
 
 略
@@ -399,11 +413,13 @@ DECLARE 变量名 类型 [default 值]; # 如果没有DEFAULT子句，初始值�
 DECLARE cur_emp CURSOR FOR
 SELECT id,salary FROM employees;
 ```
+
 - 打开游标
 
 ```sql
 OPEN cursor_name
 ```
+
 > **当我们定义好游标之后，如果想要使用游标，必须先打开游标。打开游标的时候 SELECT 语句的查询结果集就会送到游标工作区，为后面游标的**逐条读取结果集中的记录做准备。
 
 - 使用游标
@@ -411,6 +427,7 @@ OPEN cursor_name
 ```sql
 FETCH cursor_name INTO var_name [, var_name] ...
 ```
+
 > 这句的作用是使用 cursor\_name 这个游标来读取当前行，并且将数据保存到 var\_name 这个变量中，游标指针指到下一行。如果游标读取的数据行有多个列名，则在 INTO 关键字后面赋值给多个变量名即可。
 
 - 关闭游标
@@ -418,9 +435,8 @@ FETCH cursor_name INTO var_name [, var_name] ...
 ```sql
 CLOSE cursor_name
 ```
+
 > **有 OPEN 就会有 CLOSE，也就是打开和关闭游标。当我们使用完游标后需要关闭掉该游标。因为游标会**占用系统资源，如果不及时关闭，****游标会一直保持到存储过程结束**，影响系统运行的效率。而关闭游标** 的操作，会释放游标占用的系统资源。
-
-
 
 👍 MySQL 8.0版本新增了SET PERSIST 命令。**MySQL会将该命令的配置保存到数据目录下的** mysqld-auto.cnf 文件中，下次启动时会读取该文件，用其中的配置来覆盖默认的配置文件。(全局变量的持久化)
 
@@ -457,6 +473,7 @@ MySQL从5.0.2 版本开始支持触发器。MySQL的触发器和存储过程一�
 ```sql
 DROP TRIGGER IF EXISTS 触发器名称;
 ```
+
 - 优缺点
 - > - 触发器可以确保数据的完整性
   > - 触发器可以帮助我们记录操作日志
@@ -485,16 +502,19 @@ CREATE TABLE 表名(
   
 ) -- ENGINE = INNODB/myisam [ COMMENT 表注释 ] ;
 ```
+
 ```sql
 show engines; -- 查询当前数据库支持的存储引擎
 SHOW CREATE TABLE student; -- 查询建表语句
 ```
+
 ```sql
 create table my_myisam(
 id int,
 name varchar(10)
 ) engine = MyISAM ;
 ```
+
 #### （2）各个引擎的特点
 
 - InnoDB是一种兼顾高可靠性和高性能的通用存储引擎，在 MySQL 5.5 之后，InnoDB是默认的MySQL 存储引擎。
@@ -521,7 +541,6 @@ name varchar(10)
 >
 > **主要是上述三点区别，当然也可以从索引结构、存储限制等方面，更加深入的回答，具体参考如下官方文档：**
 
-
 #### （3）索引语法
 
 - 创建索引
@@ -536,11 +555,13 @@ name varchar(10)
 ```sql
 SHOW INDEX FROM table_name;
 ```
+
 - 删除索引
 
 ```sql
 DROP INDEX index_name ON table_name;
 ```
+
 ### 8. 事务与锁
 
 #### （1）事务
@@ -567,6 +588,7 @@ commit;
 -- 如果执行过程中报错, 则回滚事务
 -- rollback;
 ```
+
 - 事务四大特性 ACID
 
   - 原子性(Atomicity): 事务是不可分割的最小操作单元，要么全部成功，要么全部失败。
@@ -576,8 +598,6 @@ commit;
 - 事务隔离级别
 - 事务原理 - redo log / undo log
 - MVCC (Multi-Version Concurrency Control)
-
-
 
 #### （2）锁机制
 
@@ -599,6 +619,7 @@ commit;
 flush tables with read lock; -- 加锁
 unlock tables; -- 释放锁
 ```
+
 - 表锁
 
 ```sql
@@ -606,6 +627,7 @@ lock table 表名字 read(write),表名字2 read(write) -- 加锁
 unlock tables; -- 释放锁
 show open tables -- 查看表上加过的锁的命令
 ```
+
 - 元数据锁
 
 meta data lock , 元数据锁，简写MDL。MDL加锁过程是系统自动控制，无需显式使用，在访问一张表的时候会自动加上。MDL锁主要作用是维护表元数据的数据一致性，在表上有活动事务的时候，不可以对元数据进行写入操作。为了避免DML与DDL冲突，保证读写的正确性。
@@ -613,3 +635,7 @@ meta data lock , 元数据锁，简写MDL。MDL加锁过程是系统自动控制
 - 行锁
 
 ![image.png](assets/image15.png)
+
+
+
+11
